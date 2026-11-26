@@ -1,0 +1,45 @@
+name: ✨ 기능
+description: 새로운 기능을 추가하거나 기존 기능(성능 포함)을 개선할 때 사용해주세요.
+title: '[FEATURE] '
+type: Feature
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 요청 유형
+      options:
+        - 새로운 기능 추가
+        - 기존 기능 개선
+        - 성능 개선
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 어떤 기능인가요?
+      description: 추가하려는 기능 또는 개선하려는 부분을 간결하게 설명해주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: 이 기능이 필요한 이유는 무엇인가요?
+    validations:
+      required: true
+  - type: textarea
+    id: how
+    attributes:
+      label: 구현 방안 (선택)
+  - type: textarea
+    id: tasks
+    attributes:
+      label: 작업 상세 내용
+      value: |
+        - [ ] TODO
+    validations:
+      required: true
+  - type: textarea
+    id: refs
+    attributes:
+      label: 참고할만한 자료 (선택)
+      description: 관련 문서, 스크린샷, 디자인 링크 등을 첨부해주세요.

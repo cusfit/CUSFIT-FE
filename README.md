@@ -7,6 +7,7 @@ CUSFIT 프론트엔드 저장소입니다.
 - React 19 + TypeScript
 - Vite 8
 - Tailwind CSS v4 (`@tailwindcss/vite`)
+- react-router (브라우저 라우터)
 - oxlint (린트) + Prettier (포맷)
 - husky + lint-staged (커밋 전 검사)
 
@@ -43,22 +44,20 @@ npm run dev   # 개발 서버 실행
 
 ```
 src/
-├── assets/       # 이미지, 폰트 등 정적 리소스
-├── components/   # 재사용 컴포넌트
-├── hooks/        # 커스텀 훅
-├── pages/        # 페이지 단위 컴포넌트
-├── utils/        # 유틸 함수
-├── App.tsx
 ├── main.tsx
-└── index.css     # Tailwind 진입점
+├── app/          # 앱 진입점, 라우터, 레이아웃
+├── features/     # 기능 단위 코드 (recipes, auth, account)
+└── shared/       # 공용 UI, 에셋, 스타일
 ```
+
+자세한 구조와 import 규칙은 [AGENTS.md](AGENTS.md)를 참고하세요.
 
 ## 경로 alias
 
 `@/`는 `src/`를 가리킵니다.
 
 ```ts
-import Button from '@/components/Button'
+import RootLayout from '@/app/layouts/RootLayout'
 ```
 
 ## 코드 스타일
@@ -78,3 +77,8 @@ import Button from '@/components/Button'
 ## CI
 
 PR과 `main` 푸시마다 GitHub Actions가 `lint` → `format:check` → `build`를 실행합니다 (`.github/workflows/ci.yml`).
+
+## 협업 규칙
+
+- 브랜치·커밋·PR 규칙: [CONTRIBUTING.md](docs/CONTRIBUTING.md)
+- 코드 구조·스타일 규칙 (AI 도구 공용): [AGENTS.md](AGENTS.md)
