@@ -7,6 +7,11 @@ inheritance: true
 language: ko-KR
 
 reviews:
+  # 지적사항이 모두 해결되고 최신 커밋까지 리뷰되면 CodeRabbit이 PR을 승인한다.
+  # main 머지 규칙의 '승인 1개'를 이 승인으로 채운다. @coderabbitai approve 명령도 이 설정이 켜져 있어야 동작한다.
+  auto_approvals:
+    enabled: true
+
   # PR 본문의 @coderabbitai summary 자리에 변경 내용 요약을 채운다. (PR 템플릿의 '작업 내용' 섹션)
   high_level_summary: true
   high_level_summary_placeholder: '@coderabbitai summary'
