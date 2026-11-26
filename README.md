@@ -57,7 +57,7 @@ src/
 `@/`는 `src/`를 가리킵니다.
 
 ```ts
-import Button from '@/shared/ui/Button'
+import RootLayout from '@/app/layouts/RootLayout'
 ```
 
 ## 코드 스타일
