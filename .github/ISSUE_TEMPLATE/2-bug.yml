@@ -1,0 +1,44 @@
+name: 🐞 버그
+description: 버그를 발견했을 때 사용해주세요.
+title: '[BUG] '
+type: Bug
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: 어떤 버그인가요?
+    validations:
+      required: true
+  - type: textarea
+    id: when
+    attributes:
+      label: 어떤 상황에서 발생했나요?
+      description: 가능하면 Given-When-Then 형식으로 적어주세요.
+      placeholder: |
+        Given 로그인한 상태에서
+        When 레시피 저장 버튼을 누르면
+        Then 저장되지 않고 오류가 뜬다
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 예상 결과
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 결과
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: 환경 (선택)
+      placeholder: Chrome 140 / iOS 앱 / Android 앱
+  - type: textarea
+    id: refs
+    attributes:
+      label: 참고할만한 자료 (선택)
+      description: 스크린샷, 로그 등을 첨부해주세요.
