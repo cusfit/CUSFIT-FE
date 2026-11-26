@@ -1,0 +1,12 @@
+# pnpm 설정 (pnpm 10부터 .npmrc 대신 이 파일에 둔다)
+# 버전 기준: Node = .nvmrc, pnpm = package.json의 packageManager
+# 이 파일과 .nvmrc는 CODEOWNERS로 보호된다. 바꾸려면 담당자 승인이 필요하다.
+
+# package.json engines의 Node 버전과 다르면 설치를 실패시킨다.
+engineStrict: true
+
+# pnpm add 할 때 ^ 없이 정확한 버전으로 저장한다.
+saveExact: true
+
+# 실행 중인 pnpm 버전이 packageManager와 다르면 선언된 버전을 받아서 실행한다.
+pmOnFail: download
