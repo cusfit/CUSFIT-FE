@@ -8,6 +8,7 @@
 /.github/             @meanzzi
 /.husky/              @meanzzi
 /.coderabbit.yaml     @meanzzi
+/.claude/             @meanzzi
 /tsconfig*.json       @meanzzi
 /.oxlintrc.json       @meanzzi
 /.prettierrc          @meanzzi
