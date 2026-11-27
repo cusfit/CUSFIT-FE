@@ -2,6 +2,7 @@ name: 🔧 설정·기타 작업
 description: 빌드·CI·의존성·문서 등 기능과 버그가 아닌 작업에 사용해주세요.
 title: '[CHORE] '
 type: Task
+labels: ['Setting']
 body:
   - type: dropdown
     id: kind

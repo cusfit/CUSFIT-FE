@@ -9,7 +9,8 @@ AI 코딩 도구(Claude Code, Codex 등)가 이 저장소에서 작업할 때 �
 - 커밋 메시지는 한 줄이 기본. 이유가 코드로 드러나지 않을 때만 본문에 "왜"를 적고, 작업 내용 정리는 PR 본문에 씀
 - 브랜치: `{타입}/{이슈번호}-{영문-설명}` (예: `feat/24-recipe-save`). `feat`·`fix`는 이슈 필수, 나머지는 이슈가 없으면 `docs/update-readme`처럼 번호 생략
 - PR은 브랜치당 하나. 리뷰 반영은 같은 브랜치에 커밋을 추가로 푸시
-- 타입: `feat` `fix` `refactor` `style` `docs` `test` `chore` `ci`
+- 타입: `feat` `fix` `refactor` `style` `docs` `test` `chore` `ci`. 기존 동작이 깨지는 변경만 `feat!:`처럼 `!`를 붙임
+- PR 제목 형식은 CI가 검사하고, 라벨은 자동으로 붙음
 
 ## 프로젝트
 

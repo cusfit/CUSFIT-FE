@@ -1,0 +1,104 @@
+name: PR
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  # PR 제목이 `{타입}: {설명}` 형식인지 검사한다. (Squash 머지라서 PR 제목이 main의 커밋 메시지가 된다)
+  # main 브랜치 규칙의 필수 검사에 `title`을 추가해서 사용한다.
+  title:
+    runs-on: ubuntu-latest
+    # 같은 PR에서 연달아 실행되면 이전 검사는 취소한다. (예: PR을 열자마자 CodeRabbit이 제목을 바꾸는 경우)
+    concurrency:
+      group: pr-title-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - name: PR 제목 검사
+        env:
+          TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          pattern='^(feat|fix|refactor|style|docs|test|chore|ci)!?: [^ ].*$'
+          if [[ "$TITLE" =~ $pattern ]]; then
+            echo "제목 형식 통과: $TITLE"
+          else
+            echo "::error title=PR 제목 형식 오류::'{타입}: {설명}' 형식으로 고쳐주세요. 예) feat: 레시피 저장 추가 / 타입: feat, fix, refactor, style, docs, test, chore, ci / 지금 제목: $TITLE"
+            exit 1
+          fi
+
+  # 제목 접두사로 type 라벨을, 바뀐 파일 경로로 API 라벨을 붙인다.
+  labels:
+    runs-on: ubuntu-latest
+    # 포크에서 연 PR은 쓰기 권한이 없어서 라벨을 붙일 수 없으므로 건너뛴다.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    # 라벨 작업은 중간에 취소하지 않고 순서대로 실행한다. (라벨을 뗀 뒤 붙이기 전에 취소되는 것을 막는다)
+    concurrency:
+      group: pr-labels-${{ github.event.pull_request.number }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/github-script@v9
+        with:
+          script: |
+            const TYPE_LABELS = {
+              feat: 'Feature',
+              fix: 'BugFix',
+              refactor: 'Refactor',
+              style: 'Styles',
+              docs: 'Docs',
+              test: 'Test',
+              chore: 'Setting',
+              ci: 'CI',
+            }
+            // 저장소에 없으면 만들어 둘 라벨
+            const NEW_LABELS = {
+              CI: { color: '1d76db', description: 'GitHub Actions 등 CI 설정' },
+            }
+
+            const { owner, repo } = context.repo
+            const issue_number = context.payload.pull_request.number
+            // 이벤트 시점이 아니라 실행 시점의 최신 제목과 라벨을 기준으로 판단한다.
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: issue_number })
+
+            for (const [name, { color, description }] of Object.entries(NEW_LABELS)) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name })
+              } catch (error) {
+                if (error.status !== 404) throw error
+                await github.rest.issues.createLabel({ owner, repo, name, color, description })
+              }
+            }
+
+            const current = pr.labels.map((label) => label.name)
+            const toAdd = []
+
+            // type 라벨: 제목이 바뀌면 이전 type 라벨은 떼고 새 라벨을 붙인다.
+            const type = pr.title.match(/^([a-z]+)!?: /)?.[1]
+            const wanted = TYPE_LABELS[type]
+            for (const name of new Set(Object.values(TYPE_LABELS))) {
+              if (name !== wanted && current.includes(name)) {
+                await github.rest.issues.removeLabel({ owner, repo, issue_number, name }).catch((error) => {
+                  if (error.status !== 404) throw error
+                })
+              }
+            }
+            if (wanted && !current.includes(wanted)) toAdd.push(wanted)
+
+            // API 라벨: api.ts(x) 파일이나 api/ 폴더가 바뀌면 붙인다. (직접 붙인 라벨은 떼지 않는다)
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: issue_number,
+              per_page: 100,
+            })
+            const touchesApi = files.some((file) => /(^|\/)(api\/|api\.tsx?$)/.test(file.filename))
+            if (touchesApi && !current.includes('API')) toAdd.push('API')
+
+            if (toAdd.length > 0) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number, labels: toAdd })
+            }
+            core.info(`type: ${type ?? '(없음)'} → ${wanted ?? '-'}, 추가한 라벨: ${toAdd.join(', ') || '없음'}`)
