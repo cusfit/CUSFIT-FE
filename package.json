@@ -24,6 +24,7 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
       "oxlint",
+      "vitest related --run --passWithNoTests",
       "prettier --write"
     ],
     "*.{json,css,html,md,yml,yaml}": "prettier --write"

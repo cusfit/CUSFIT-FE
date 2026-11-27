@@ -46,7 +46,7 @@ pnpm install --frozen-lockfile   # pnpm-lock.yaml 버전 그대로 설치 (다�
 pnpm dev                         # 개발 서버 실행
 ```
 
-설치 시 husky가 자동으로 설정되어, 커밋할 때 변경된 파일에 oxlint와 Prettier가 실행됩니다.
+설치 시 husky가 자동으로 설정되어, 커밋할 때 변경된 파일에 oxlint, 관련 테스트, Prettier가 실행됩니다. 하나라도 실패하면 커밋이 막힙니다. 전체 테스트는 PR을 올리면 CI가 돌립니다.
 
 ### 라이브러리 추가
 
