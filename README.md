@@ -33,11 +33,11 @@ corepack 대신 pnpm을 따로 설치해 써도 됩니다. 버전이 다르면 p
 ### 설치 및 실행
 
 ```bash
-pnpm install   # pnpm-lock.yaml 버전 그대로 설치
-pnpm dev       # 개발 서버 실행
+pnpm install --frozen-lockfile   # pnpm-lock.yaml 버전 그대로 설치 (다르면 설치 중단)
+pnpm dev                         # 개발 서버 실행
 ```
 
-`pnpm install` 시 husky가 자동으로 설정되어, 커밋할 때 변경된 파일에 oxlint와 Prettier가 실행됩니다.
+설치 시 husky가 자동으로 설정되어, 커밋할 때 변경된 파일에 oxlint와 Prettier가 실행됩니다.
 
 ### 라이브러리 추가
 

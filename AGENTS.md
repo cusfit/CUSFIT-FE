@@ -20,12 +20,12 @@ AI 코딩 도구(Claude Code, Codex 등)가 이 저장소에서 작업할 때 �
 ## 명령어
 
 ```bash
-pnpm install          # 설치 (pnpm-lock.yaml 그대로)
-pnpm dev              # 개발 서버
-pnpm lint             # oxlint
-pnpm format:check     # Prettier 검사
-pnpm build            # 타입 체크 + 빌드
-pnpm check:versions   # Node·pnpm·의존성 버전 고정 검사
+pnpm install --frozen-lockfile  # 설치 (pnpm-lock.yaml 그대로, 다르면 중단)
+pnpm dev                        # 개발 서버
+pnpm lint                       # oxlint
+pnpm format:check               # Prettier 검사
+pnpm build                      # 타입 체크 + 빌드
+pnpm check:versions             # Node·pnpm·의존성 버전 고정 검사
 ```
 
 - 패키지 매니저는 pnpm만 씁니다. `npm`, `yarn`으로 설치하거나 `package-lock.json`을 만들지 않습니다.
