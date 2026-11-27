@@ -102,3 +102,5 @@ PR과 `main` 푸시마다 GitHub Actions가 `lint` → `format:check` → `build
 
 - 브랜치·커밋·PR 규칙: [CONTRIBUTING.md](docs/CONTRIBUTING.md)
 - 코드 구조·스타일 규칙 (AI 도구 공용): [AGENTS.md](AGENTS.md)
+- 디자인(Figma)과 디자인 시스템 작업 순서: [docs/design.md](docs/design.md)
+- 팀이 정한 것과 이유: [docs/decisions.md](docs/decisions.md)
