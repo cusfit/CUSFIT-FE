@@ -20,7 +20,9 @@ jobs:
           cache: pnpm
 
       - run: node .github/scripts/check-versions.mjs
+      - run: node .github/scripts/check-hardcoded-urls.mjs
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm format:check
+      - run: pnpm test
       - run: pnpm build

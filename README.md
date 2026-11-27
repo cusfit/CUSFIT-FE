@@ -10,6 +10,7 @@ CUSFIT 프론트엔드 저장소입니다.
 - react-router (브라우저 라우터)
 - oxlint (린트) + Prettier (포맷)
 - husky + lint-staged (커밋 전 검사)
+- Vitest + Testing Library (테스트)
 
 ## 시작하기
 
@@ -29,6 +30,14 @@ corepack enable       # packageManager에 적힌 pnpm 버전을 자동으로 사
 ```
 
 corepack 대신 pnpm을 따로 설치해 써도 됩니다. 버전이 다르면 pnpm이 `packageManager`에 적힌 버전을 받아서 실행합니다.
+
+### 환경 변수
+
+```bash
+cp .env.example .env.local   # 복사한 뒤 값을 채웁니다. .env.local은 git에 올라가지 않습니다
+```
+
+URL·API 주소·키는 코드에 직접 쓰지 않고 환경 변수로 넣습니다. 코드에서는 `src/shared/config/env.ts`의 `env`로 읽습니다.
 
 ### 설치 및 실행
 
@@ -50,15 +59,18 @@ pnpm add -D vitest      # 개발용 의존성
 
 ## 스크립트
 
-| 명령어                | 설명                            |
-| --------------------- | ------------------------------- |
-| `pnpm dev`            | 개발 서버 실행                  |
-| `pnpm build`          | 타입 체크 후 프로덕션 빌드      |
-| `pnpm preview`        | 빌드 결과 미리보기              |
-| `pnpm lint`           | oxlint 실행                     |
-| `pnpm format`         | Prettier로 전체 파일 포맷       |
-| `pnpm format:check`   | 포맷이 맞는지 검사 (수정 없음)  |
-| `pnpm check:versions` | Node·pnpm·의존성 버전 고정 검사 |
+| 명령어                | 설명                                |
+| --------------------- | ----------------------------------- |
+| `pnpm dev`            | 개발 서버 실행                      |
+| `pnpm build`          | 타입 체크 후 프로덕션 빌드          |
+| `pnpm preview`        | 빌드 결과 미리보기                  |
+| `pnpm lint`           | oxlint 실행                         |
+| `pnpm format`         | Prettier로 전체 파일 포맷           |
+| `pnpm format:check`   | 포맷이 맞는지 검사 (수정 없음)      |
+| `pnpm test`           | 테스트 실행                         |
+| `pnpm test:watch`     | 파일을 고칠 때마다 테스트 다시 실행 |
+| `pnpm check:versions` | Node·pnpm·의존성 버전 고정 검사     |
+| `pnpm check:urls`     | URL 하드코딩 검사                   |
 
 ## 폴더 구조
 
@@ -97,6 +109,12 @@ import RootLayout from '@/app/layouts/RootLayout'
 ## CI
 
 PR과 `main` 푸시마다 GitHub Actions가 `lint` → `format:check` → `build`를 실행합니다 (`.github/workflows/ci.yml`).
+
+## AI 도구 설정
+
+- 공통 규칙: `AGENTS.md` (Claude Code, Codex 모두 읽음)
+- Claude Code 팀 공용 설정: `.claude/settings.json` — 자주 쓰는 검사 명령 허용, 위험한 명령(강제 푸시, `main` 직접 푸시 등) 차단, 라이브러리 추가 시 확인, 파일 수정 후 자동 포맷
+- 개인 설정은 `.claude/settings.local.json`에 둡니다 (git에 올라가지 않음).
 
 ## 협업 규칙
 

@@ -11,6 +11,10 @@ AI 코딩 도구(Claude Code, Codex 등)가 이 저장소에서 작업할 때 �
 - PR은 브랜치당 하나. 리뷰 반영은 같은 브랜치에 커밋을 추가로 푸시
 - 타입: `feat` `fix` `refactor` `style` `docs` `test` `chore` `ci`. 기존 동작이 깨지는 변경만 `feat!:`처럼 `!`를 붙임
 - PR 제목 형식은 CI가 검사하고, 라벨은 자동으로 붙음
+- **커밋은 스스로 하지 않습니다.** 작업이 끝나면 "커밋할까요?"라고 묻고, 사람이 승인하면 커밋합니다.
+- **커밋하면 푸시까지 함께** 합니다. 커밋이나 푸시를 요청하는 말은 한국어·영어·줄임말 상관없이 모두 "커밋 후 푸시"로 이해합니다 (예: 커밋, 푸시, 커푸, commit, push).
+- 커밋하기 전에 아래 "완료 기준"을 모두 확인합니다.
+- 작업 중간에 여러 번 커밋하지 말고, 작업 단위로 모아서 한 번에 커밋합니다. CodeRabbit 리뷰가 푸시할 때마다 한 번씩 돌기 때문입니다.
 
 ## 프로젝트
 
@@ -49,8 +53,10 @@ pnpm install --frozen-lockfile  # 설치 (pnpm-lock.yaml 그대로, 다르면 �
 pnpm dev                        # 개발 서버
 pnpm lint                       # oxlint
 pnpm format:check               # Prettier 검사
+pnpm test                       # 테스트 (Vitest)
 pnpm build                      # 타입 체크 + 빌드
 pnpm check:versions             # Node·pnpm·의존성 버전 고정 검사
+pnpm check:urls                 # URL 하드코딩 검사
 ```
 
 - 패키지 매니저는 pnpm만 씁니다. `npm`, `yarn`으로 설치하거나 `package-lock.json`을 만들지 않습니다.
@@ -60,7 +66,7 @@ pnpm check:versions             # Node·pnpm·의존성 버전 고정 검사
 
 "다 했다"고 하기 전에 아래를 모두 지킵니다.
 
-- `pnpm lint`, `pnpm format:check`, `pnpm build`, `pnpm check:versions` 통과 (CI도 같은 검사를 합니다)
+- `pnpm lint`, `pnpm format:check`, `pnpm test`, `pnpm build`, `pnpm check:versions`, `pnpm check:urls` 통과 (CI도 같은 검사를 합니다)
 - 화면을 바꿨으면 `pnpm dev`로 실제 화면을 확인
 - 바꾼 내용, 확인한 방법, 확인하지 못한 것을 함께 보고
 
@@ -85,7 +91,9 @@ src/
 └── shared/           # 여러 기능이 같이 쓰는 코드
     ├── ui/               # 공용 버튼, 입력창
     ├── assets/
-    └── styles/
+    ├── styles/
+    ├── config/           # 환경 변수 (env.ts)
+    └── test/             # 테스트 공통 설정
 ```
 
 ### 의존 방향
@@ -117,9 +125,19 @@ features/recipes/detail/
 - 화면 문구는 한국어, 변수·함수·파일 이름은 영어로 씁니다.
 - 주석은 "왜"가 필요한 곳에만 한국어로 짧게 씁니다. 코드를 그대로 설명하는 주석은 쓰지 않습니다.
 
+## 테스트
+
+- 도구: Vitest + Testing Library (jsdom)
+- 로직, 훅, 공용 컴포넌트(`shared/ui`)를 만들거나 고치면 테스트를 함께 씁니다.
+- 테스트 파일은 대상 옆에 `*.test.ts(x)`로 둡니다 (예: `RecipeCard.tsx` → `RecipeCard.test.tsx`).
+- 요소는 사용자가 보는 기준으로 찾습니다 (`getByRole`, `getByText`). `className`이나 내부 구현에 기대지 않습니다.
+- 테스트 이름은 한국어로, 무엇을 보장하는지 씁니다 (예: `'저장 버튼을 누르면 저장 목록에 추가된다'`).
+
 ## 하지 말 것
 
 - **의존성, Node, 패키지 매니저 버전을 바꾸지 않습니다.** `.nvmrc`·`engines`·`packageManager` 수정이 필요하면 작업을 멈추고 사람에게 먼저 물어보세요.
 - 라이브러리는 확인받은 뒤 `pnpm add`로 추가하고, `package.json`에 `^`·`~` 없는 정확한 버전만 남깁니다.
 - lint 규칙을 끄거나 `// oxlint-disable`, `@ts-ignore`, `any`로 오류를 피하지 않습니다.
+- **URL·API 주소·키·토큰을 코드에 직접 쓰지 않습니다.** `.env.local`에 넣고 `src/shared/config/env.ts`의 `env`로 읽습니다. 새 값이 필요하면 `.env.example`, `src/env.d.ts`, `env.ts`에 함께 추가합니다. (URL 하드코딩은 CI가 검사합니다)
+- `VITE_`로 시작하는 환경 변수는 빌드 결과에 그대로 노출됩니다. 비밀값은 넣지 않고, `.env.local`은 커밋하지 않습니다.
 - 요청받지 않은 파일을 정리하거나 대규모로 리팩터링하지 않습니다.
