@@ -1,0 +1,14 @@
+# 버전·빌드·CI 설정 파일은 담당자 승인 후 머지한다.
+# (main 브랜치 규칙의 "Require review from Code Owners"가 켜져 있어야 적용된다)
+# package.json과 pnpm-lock.yaml은 라이브러리 추가를 위해 보호하지 않는다.
+# 대신 pnpm·Node 버전과 의존성 고정 여부는 CI의 .github/scripts/check-versions.mjs가 검사한다.
+
+/.nvmrc               @meanzzi
+/pnpm-workspace.yaml  @meanzzi
+/.github/             @meanzzi
+/.husky/              @meanzzi
+/.coderabbit.yaml     @meanzzi
+/tsconfig*.json       @meanzzi
+/.oxlintrc.json       @meanzzi
+/.prettierrc          @meanzzi
+/.prettierignore      @meanzzi

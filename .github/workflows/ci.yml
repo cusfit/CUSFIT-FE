@@ -11,12 +11,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # version을 적지 않으면 package.json의 packageManager 버전을 설치한다.
+      - uses: pnpm/action-setup@v6
+
       - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run format:check
-      - run: npm run build
+      - run: node .github/scripts/check-versions.mjs
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm build

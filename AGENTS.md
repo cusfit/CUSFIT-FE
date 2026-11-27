@@ -20,12 +20,16 @@ AI 코딩 도구(Claude Code, Codex 등)가 이 저장소에서 작업할 때 �
 ## 명령어
 
 ```bash
-npm ci                # 설치 (package-lock.json 그대로)
-npm run dev           # 개발 서버
-npm run lint          # oxlint
-npm run format:check  # Prettier 검사
-npm run build         # 타입 체크 + 빌드
+pnpm install --frozen-lockfile  # 설치 (pnpm-lock.yaml 그대로, 다르면 중단)
+pnpm dev                        # 개발 서버
+pnpm lint                       # oxlint
+pnpm format:check               # Prettier 검사
+pnpm build                      # 타입 체크 + 빌드
+pnpm check:versions             # Node·pnpm·의존성 버전 고정 검사
 ```
+
+- 패키지 매니저는 pnpm만 씁니다. `npm`, `yarn`으로 설치하거나 `package-lock.json`을 만들지 않습니다.
+- Node 24.22.3, pnpm 12.23.0으로 고정되어 있습니다.
 
 작업을 끝내기 전에 `lint`, `format:check`, `build`가 모두 통과하는지 확인하세요. CI도 같은 순서로 검사합니다.
 
@@ -82,7 +86,8 @@ features/recipes/detail/
 
 ## 하지 말 것
 
-- **의존성, Node, 패키지 매니저 버전을 바꾸지 않습니다.** 패키지 추가·업그레이드, `.nvmrc`·`engines` 수정이 필요하면 작업을 멈추고 사람에게 먼저 물어보세요.
+- **의존성, Node, 패키지 매니저 버전을 바꾸지 않습니다.** 패키지 추가·업그레이드, `.nvmrc`·`engines`·`packageManager` 수정이 필요하면 작업을 멈추고 사람에게 먼저 물어보세요.
+- 라이브러리를 추가할 때는 `pnpm add`를 쓰고, `package.json`에 `^`·`~` 없는 정확한 버전만 남깁니다.
 - lint 규칙을 끄거나 `// oxlint-disable`, `@ts-ignore`, `any`로 오류를 피하지 않습니다.
-- CI 설정(`.github/workflows`), lint·포맷·TypeScript 설정 파일을 요청 없이 수정하지 않습니다.
+- CI 설정(`.github/`), `pnpm-workspace.yaml`, lint·포맷·TypeScript 설정 파일을 요청 없이 수정하지 않습니다. 이 파일들은 CODEOWNERS로 보호됩니다.
 - 요청받지 않은 파일을 정리하거나 대규모로 리팩터링하지 않습니다.
