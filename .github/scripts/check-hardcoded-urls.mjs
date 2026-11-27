@@ -2,9 +2,16 @@
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-// 표준 네임스페이스처럼 주소가 아닌 식별자로 쓰이는 URL만 허용한다.
-const ALLOWED = [/^https?:\/\/www\.w3\.org\//]
-const URL_PATTERN = /https?:\/\/[^\s'"`)<>]+/g
+// 표준 네임스페이스처럼 주소가 아닌 식별자로 쓰이는 값만 정확히 허용한다.
+const ALLOWED = new Set([
+  'http://www.w3.org/2000/svg',
+  'http://www.w3.org/1999/xlink',
+  'http://www.w3.org/1999/xhtml',
+  'http://www.w3.org/XML/1998/namespace',
+  'http://www.w3.org/2000/xmlns/',
+])
+// URL 스킴은 대소문자를 구분하지 않으므로 HTTPS:// 도 잡는다.
+const URL_PATTERN = /https?:\/\/[^\s'"`)<>]+/gi
 const EXTENSIONS = /\.(ts|tsx|js|jsx|css)$/
 
 function* walk(dir) {
@@ -21,7 +28,7 @@ for (const file of walk('src')) {
     .split('\n')
     .forEach((line, index) => {
       for (const [url] of line.matchAll(URL_PATTERN)) {
-        if (!ALLOWED.some((pattern) => pattern.test(url))) {
+        if (!ALLOWED.has(url)) {
           errors.push(`${file}:${index + 1}  ${url}`)
         }
       }
